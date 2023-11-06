@@ -1,16 +1,11 @@
-{% extends "homebase.html"
-%}
+{% extends "homebase.html" %}
+
 {% block title %} Index Sayfası {% endblock %}
-{%block keywords %} Index Sayfası anahtar kelimler {% endblock %}
+{% block keywords %} Index Sayfası anahtar kelimler {% endblock %}
 {% block description %}index Sayfası açiklama {% endblock %}
 
-{% block sidebar %}
-    {% include "sidebar.html" %}
-{% endblock %}
-{% block slider %}
-    {% include "slider.html" %}
-{% endblock %}
+{% block sidebar %}{% include "sidebar.html" %}{% endblock %}
 
-{% block body %}
-    {% include "content.html" %}
-{% endblock %}
+{% block slider %}{% include "slider.html" %}{% endblock %}
+
+{% block content %} {% include "content.html" %} {% endblock %}
