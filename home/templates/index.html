@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "homebase.html"
+%}
+{% block title %} Index Sayfası {% endblock %}
+{%block keywords %} Index Sayfası anahtar kelimler {% endblock %}
+{% block description %}index Sayfası açiklama {% endblock %}
 
-<h1>Hoşgeldin</h1>
+{% block sidebar %}
+    {% include "sidebar.html" %}
+{% endblock %}
+{% block slider %}
+    {% include "slider.html" %}
+{% endblock %}
 
-<p>
-    {{ text }}
-</p>
-
-
-
-</body>
-</html>
+{% block body %}
+    {% include "content.html" %}
+{% endblock %}
