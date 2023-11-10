@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.safestring import mark_safe
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class Category(models.Model):
     STATUS = (
@@ -18,6 +20,10 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+    def image_tag(self):
+        return mark_safe('<img src="{}" height = "50"/>'.format(self.image.url))
+    image_tag.short_description = 'Image'
+
 class Product(models.Model):
     STATUS = (
         ('True', 'Evet'),
@@ -27,16 +33,20 @@ class Product(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
     keywords = models.CharField(max_length=250)
-    image = models.ImageField(blank=True, upload_to='images/')
+    image = models.ImageField(upload_to='images/',null=False)
     status = models.CharField(max_length=10, choices=STATUS)
     price = models.FloatField()
     amount = models.IntegerField()
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    detail = models.TextField()
+    detail = RichTextUploadingField()
 
     def __str__(self):
         return self.title
+
+    def image_tag(self):
+        return mark_safe('<img src="{}" height = "50"/>'.format(self.image.url))
+    image_tag.short_description = 'Image'
 
 
 class Images(models.Model):
@@ -45,4 +55,9 @@ class Images(models.Model):
     image = models.ImageField(blank=True, upload_to='images/')
     def __str__(self):
         return self.title
+
+    def image_tag(self):
+        return mark_safe('<img src="{}" height = "50"/>'.format(self.image.url))
+    image_tag.short_description = 'Image'
+
 
