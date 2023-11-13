@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Images
+from  product.models import Category, Product, Images
 
 class ProductImageInLine(admin.TabularInline):
     model = Images
@@ -27,5 +27,5 @@ class ImagesAdmin(admin.ModelAdmin):
 
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Product,ProductAdmin)
-admin.site.register(Images, ImagesAdmin)
+admin.site.register(Images)
 
