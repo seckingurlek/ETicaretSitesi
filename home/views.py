@@ -1,15 +1,32 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from .models import Setting
+from eticaret.eticaret.forms import SearchForm
+
 # Create your views here.
 from home.models import Setting, ContactFormMessage, ContactForm
 from django.contrib import messages
+from product.models import Product, Category
+
 
 
 
 def index(request):
     setting = Setting.objects.get(pk=1)
-    context = {'setting': setting,'page':'home'}
+    sliderdata = Product.objects.all()[:4]
+    category = Category.objects.all()
+    dayproducts=Product.objects.all()[:4]
+    lastproducts=Product.objects.all().order_by('-id')[:4]
+    randomproduct=Product.objects.all().order_by('?')[:4]
+    
+
+    context = {'setting': setting,
+               'category' : category,
+               'page':'home',
+               'dayproducts':dayproducts,
+               'sliderdata':sliderdata,
+               'randomproducts':randomproduct,
+               'lastproducts': lastproducts
+               }   
     return render(request, 'index.html',context)
 
 def hakkimizda(request):
@@ -36,7 +53,33 @@ def iletisim(request): #formu kaydetme
             data.save()  #save data to table
             messages.success(request,"Your message has ben sent.")
             return HttpResponseRedirect('/iletisim')
+        
     setting = Setting.objects.get(pk=1)
     form = ContactForm()
     context={'setting':setting,'form':form }
     return render(request, 'iletisim.html', context)
+
+def category_products(request,id,slug):
+    category = Category.objects.all()
+    categorydata = Category.objects.all(pk=id)
+    products = Product.objects.filter(category_id=id)
+    context = {'products': products,
+               'category': category,
+               'categorydata':categorydata,
+                }
+    return render(request,'products.html',context)
+
+def product_search (request):
+    if request.method == 'POST': # form post edildiyse I
+        form = SearchForm(request.POST)
+        if form.is_valid ():
+                category= Category.objects.all()
+                query = form.cleaned_data[ 'query'] #formdan bilgiyi al
+                products = Product.objects.filter (title__icontains=query) # Select * from product where title like %query%
+                    #return HttpResponse (products)
+                context = {'products': products,
+                            'category': category,
+                            }
+                return render (request, 'products_search.html', context)
+    return HttpResponseRedirect('/')
+

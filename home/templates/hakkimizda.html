@@ -4,6 +4,10 @@
 {% block description %} {{ setting.description }} {% endblock %}
 {% block keywords %} {{ setting.keywords }} {% endblock %}
 
+{% block head %}
+    <link rel='shortcut icon' type='image/xicon' href='{{setting.icon.url}}' />
+{% endblock %}
+
 {% block sidebar %} {% include 'sidebar.html' %} {% endblock %}
 
 {% block body %}
