@@ -1,5 +1,5 @@
 from django.contrib import admin
-from  product.models import Category, Product, Images
+from  product.models import Category, Product, Images, Comment
 from mptt.admin import MPTTModelAdmin, DraggableMPTTAdmin
 
 
@@ -60,8 +60,10 @@ class CategoryAdmin2(DraggableMPTTAdmin):
         return instance.products_cumulative_count
     related_products_cumulative_count.short_description = 'Related products (in tree)'
 
-
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['subject', 'comment','product','user','status']
+    list_filter = ['status']
 admin.site.register(Category,CategoryAdmin2)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Images,ImagesAdmin)
-
+admin.site.register(Comment, CommentAdmin)

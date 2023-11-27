@@ -1,6 +1,5 @@
 {% load static %}
 
-
 <!-- NAVIGATION -->
 <div id="navigation">
     <!-- container -->
@@ -14,29 +13,31 @@
             {% endif %}
 
             <span class="category-header">Categories <i class="fa fa-list"></i></span>
-
+        <ul class="category-list">
             {% load mptt_tags %}
-            <ul class="category-list">
-                {% recursetree category %}
-                    <li class="dropdown side-dropdown">
-                        <a href="{% url 'category_products' node.id node.slug %}" class="dropdown-toggle" {% if not node.is_leaf_node %} data-toggle="dropdown" aria-expanded="true" {% endif %}>{{ node.title }} <i class="fa fa-angle-right"></i></a>
-                        <div class="custom-menu">
-                            <div class="row">
-                                <div class="col-md-4">
 
-                                    {% if not node.is_leaf_node %}
-                                        <ul class="list-links">
-                                            <hr>
-                                            <li><a href="#">{{ children }}</a></li>
-                                        </ul>
-                                    {% endif %}
+            {% recursetree category %}
+            
+                
+                <li class="dropdown side-dropdown">
+                    <a href="/category/{{ node.id }}/{{ node.slug }}" class="dropdown-toggle" {% if not node.is_leaf_node %} data-toggle="dropdown" aria-expanded="true" {% endif %}>{{ node.title }} <i class="fa fa-angle-right"></i></a>
+                    <div class="custom-menu">
+                        <div class="row">
+                            <div class="col-md-4">
 
-                                    <hr class="hidden-md hidden-lg">
-                                </div>
+                                {% if not node.is_leaf_node %}
+                                    <ul class="list-links">
+                                        <hr>
+                                        <li><a href="#">{{ children }}</a></li>
+                                    </ul>
+                                {% endif %}
+
+                                <hr class="hidden-md hidden-lg">
                             </div>
                         </div>
-                    </li>
-                {% endrecursetree %}
+                    </div>
+                </li>
+            {% endrecursetree %}
 
             </ul>
             </div>

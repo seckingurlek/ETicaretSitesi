@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from home import views
+from . import views
 
 urlpatterns = [
     path('', include('home.urls')),
@@ -32,6 +32,11 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('category/<int:id>/<slug:slug>/', views.category_products,name='category_products'),
     path('search/',views.product_search, name='product_search'),
+    path('product/<int:id>/<slug:slug>/', views.product_detail,name='product_detail'),
+    path('search_auto/',views.product_search_auto, name='product_search_auto'),
+    path('logout',views.logout_view,name='logout_view' ),
+    path('login',views.login_view,name='login_view' ),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

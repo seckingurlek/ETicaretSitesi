@@ -1,12 +1,14 @@
+import json
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from eticaret.eticaret.forms import SearchForm
+
+from eticaret.forms import SearchForm
 
 # Create your views here.
-from home.models import Setting, ContactFormMessage, ContactForm
+from home.models import Setting, ContactFormMessage, ContactForm, Product
 from django.contrib import messages
-from product.models import Product, Category
-
+from product.models import Images, Product, Category, Comment, Product
+from django.contrib.auth import logout, authenticate, login
 
 
 
@@ -74,12 +76,69 @@ def product_search (request):
         form = SearchForm(request.POST)
         if form.is_valid ():
                 category= Category.objects.all()
-                query = form.cleaned_data[ 'query'] #formdan bilgiyi al
-                products = Product.objects.filter (title__icontains=query) # Select * from product where title like %query%
-                    #return HttpResponse (products)
+                query = form.cleaned_data[ 'query']
+                catid = form.cleaned_data[ 'catid'] #formdan bilgiyi al
+                
+                if catid ==0:
+                    products = Product.objects.filter (title__icontains=query) # Select * from product where title like %query%
+                else:
+                    products = Product.objects.filter (title__icontains=query, category_id=catid)
+                #return HttpResponse (products)    
                 context = {'products': products,
                             'category': category,
                             }
-                return render (request, 'products_search.html', context)
+                return render(request, 'products_search.html', context)
     return HttpResponseRedirect('/')
 
+def product_detail(request,id,slug):
+    category = category.objects.all()   
+    product = Category.objects.all(pk=id)
+    image = Images.objects.filter(product_id= id )
+    comments= Comment.objects.filter(product_id=id,status= 'True')
+    context ={
+        'category' : category ,
+        'products' : product ,
+        'images' : image ,
+        'comments': comments,
+        }
+    return render(request,'product_detail.html',context)
+
+def product_search_auto(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        places = Product.objects.filter(title__icontains=q)
+        results = []
+        for rs in product:
+            product_json = {}
+            product_json = rs.title
+            results.append(product_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)    
+
+def product_asearch(request):
+    return render(request, 'asearch.html')
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
+def login_view(request):
+    if request.method == 'POST':
+        username= request.POST['username']
+        password= request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect('/')
+        else:  
+            messages.error(request,"Login hatası ! Kullanıcı adı ya da şifre yanlış.")
+            return HttpResponseRedirect('/login') 
+
+    category = category.objects.all()
+    context ={
+        'category' : category ,
+        }
+    return render(request, 'login.html',context)
