@@ -2,12 +2,13 @@ import json
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-from eticaret.forms import SearchForm
+from eticaret.forms import SearchForm, SignUpForm
 
 # Create your views here.
-from home.models import Setting, ContactFormMessage, ContactForm, Product
+from home.models import Setting, ContactFormMessage, ContactForm
+
 from django.contrib import messages
-from product.models import Images, Product, Category, Comment, Product
+from product.models import Images, Product, Category, Comment
 from django.contrib.auth import logout, authenticate, login
 
 
@@ -34,7 +35,7 @@ def index(request):
 def hakkimizda(request):
     setting = Setting.objects.get(pk=1)
     context = {'setting': setting}
-    return render(request, 'hakkimizda.html',context)
+    return render(request,'hakkimizda.html',context)
 
 def referanslar(request):
     setting = Setting.objects.get(pk=1)
@@ -63,7 +64,7 @@ def iletisim(request): #formu kaydetme
 
 def category_products(request,id,slug):
     category = Category.objects.all()
-    categorydata = Category.objects.all(pk=id)
+    categorydata = Category.objects.get(pk=id)
     products = Product.objects.filter(category_id=id)
     context = {'products': products,
                'category': category,
@@ -91,14 +92,14 @@ def product_search (request):
     return HttpResponseRedirect('/')
 
 def product_detail(request,id,slug):
-    category = category.objects.all()   
+    category = Category.objects.all()   
     product = Category.objects.all(pk=id)
-    image = Images.objects.filter(product_id= id )
+    images = Images.objects.filter(product_id= id )
     comments= Comment.objects.filter(product_id=id,status= 'True')
     context ={
         'category' : category ,
         'products' : product ,
-        'images' : image ,
+        'images' : images ,
         'comments': comments,
         }
     return render(request,'product_detail.html',context)
@@ -106,9 +107,9 @@ def product_detail(request,id,slug):
 def product_search_auto(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
-        places = Product.objects.filter(title__icontains=q)
+        products = Product.objects.filter(title__icontains=q)
         results = []
-        for rs in product:
+        for rs in products:
             product_json = {}
             product_json = rs.title
             results.append(product_json)
@@ -137,8 +138,26 @@ def login_view(request):
             messages.error(request,"Login hatası ! Kullanıcı adı ya da şifre yanlış.")
             return HttpResponseRedirect('/login') 
 
-    category = category.objects.all()
+    category = Category.objects.all()
     context ={
         'category' : category ,
         }
     return render(request, 'login.html',context)
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)  
+        if form.is_valid():
+            form.save()
+            username= request.POST['username']
+            password= request.POST['password']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return HttpResponseRedirect('/')
+    
+    form = SignUpForm()       
+    category = Category.objects.all()
+    context ={'category' : category ,
+              'form':form,
+            }
+    return render(request, 'signup.html',context)

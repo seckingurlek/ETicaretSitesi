@@ -1,12 +1,12 @@
 {% extends 'homebase.html' %}
 
-{% block title %} Hakkımızda- {{ setting.title }} {% endblock %}
+{% block title %} hakkimizda- {{ setting.title }} {% endblock %}
 {% block description %} {{ setting.description }} {% endblock %}
 {% block keywords %} {{ setting.keywords }} {% endblock %}
 
 {% block head %}
     <link rel='shortcut icon' type='image/xicon' href='{{setting.icon.url}}' />
-{% endblock %}
+{% endblock %} 
 
 {% block sidebar %} {% include 'sidebar.html' %} {% endblock %}
 
@@ -17,7 +17,7 @@
 		<div class="container">
 			<ul class="breadcrumb">
 				<li><a href="/">Anasayfa</a></li>
-				<li class="active">Hakkımızda</li>
+				<li class="active">Hakkimizda</li>
 			</ul>
 		</div>
 	</div>
@@ -29,7 +29,7 @@
 		<div class="container">
 			<!-- row -->
 			<div class="row">
-                {{ setting.aboutus|safe }}
+                {{ setting.hakkimizda|safe }}
 			</div>
 			<!-- /row -->
 		</div>

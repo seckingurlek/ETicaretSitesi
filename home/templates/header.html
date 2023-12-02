@@ -70,21 +70,21 @@
 					<div class="header-search">
 						<form action="/search/" method="post">
 							{% csrf_token %}
-							<input id="query"  name="query" class="input search-input" type="text" placeholder="Enter your keyword">
+							<!-- <input id="query"  name="query" class="input search-input" type="text" placeholder="Enter your keyword"> -->
 							{% load mptt_tags %}
 
 							<select name="catid" class="input search-categories">
 								<option value="0">All Categories</option>
 								{% recursetree category %}
-									{% if node.is_leaf_node %} 
-									<option value="{{ node.id }}">{{ node.title }}</option> 
-									{% endif %}
-									{% if not node.is_leaf_node %}
-										<optgroup label="{{ node.title }}">
-											{{ children }}
-										</optgroup>
-									{% endif %}	
-								{% endrecursetree %}	
+										{% if node.is_leaf_node %} 
+											<option value="{{ node.id }}">{{ node.title }}</option> 
+										{% endif %}
+										{% if not node.is_leaf_node %}
+											<optgroup label="{{ node.title }}">
+												{{ node.get_children }}
+											</optgroup>
+										{% endif %}	
+ 								{% endrecursetree %}	
 							</select>
 
 							<button class="search-btn"><i class="fa fa-search"></i></button>
@@ -106,7 +106,7 @@
 							</div>
 							{% else %}
 
-							<a href="/login/" class="text-uppercase">Login</a> / <a href="/join/" class="text-uppercase">Join</a>
+							<a href="/login/" class="text-uppercase">Login</a> / <a href="/signup/" class="text-uppercase">Sign up</a>
 							{% endif %}
 							<ul class="custom-menu">
 								<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>

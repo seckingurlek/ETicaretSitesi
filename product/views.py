@@ -2,8 +2,9 @@ from urllib import request
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from product.models import Comment, CommentForm
-from django.contrib.auth.decorators import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 
 # Create your views here.
 def index():
