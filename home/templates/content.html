@@ -86,11 +86,11 @@
                                     <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
                                     <button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
                                     {% if rs.variant == 'None'%}
-                                        <a href="{% url 'addtoshopcart' rs.id %}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                        <a href="/order/addtocart/{{ rs.id }}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
                                     {% else %}
                                         <a href="{% url 'product_detail' rs.id rs.slug %}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Detail</a>
                                     {% endif %}
-                                </div>
+                                </div> 
                             </div>
                         </div>
                     </div>

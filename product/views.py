@@ -7,7 +7,7 @@ from django.contrib import messages
 
 
 # Create your views here.
-def index():
+def index(request):
     return HttpResponse("Product Page")
 
 @login_required(login_url='/login') #check login

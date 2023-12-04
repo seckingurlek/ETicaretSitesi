@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'order.apps.OrderConfig',
+    'user.apps.UserConfig',
     'ckeditor',
     'ckeditor_uploader',
     'product.apps.ProductConfig',

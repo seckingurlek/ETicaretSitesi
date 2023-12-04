@@ -61,6 +61,16 @@
                         </div>
                         <div class="col-md-6">
                             <div class="product-body">
+
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{message.tags}}" role="alert">
+                                            {{message}}
+                                        </div>    
+                                    {% endfor %}
+                                {% endif %}            
+                                        
+
                                 <div class="product-label">
                                     <span>New</span>
                                     <span class="sale">-20%</span>
@@ -83,11 +93,15 @@
                                
     
                                 <div class="product-btns">
-                                    <div class="qty-input">
-                                        <span class="text-uppercase">Adet: </span>
-                                        <input class="input" type="number" min="0" max="{{ product.amount }}" value="1">
-                                    </div>
-                                    <button class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                                    <form action="/order/addtocart/{{ product.id }}" method="post">
+                                        {% csrf_token %}
+                                        <div class="qty-input">
+                                            <span class="text-uppercase">Adet: </span>
+                                            <input name="quantity" type="number" min="0" max="{{ product.amount }}" value="1">
+                                        </div>
+                                    <button type="submit" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                                    </form>
+
                                     <div class="pull-right">
                                         <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
                                         <button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
