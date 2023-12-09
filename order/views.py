@@ -9,8 +9,11 @@ from product.models import Category, Product
 from django.utils.crypto import get_random_string
 
 
+def index(request):
+     return HttpResponse('Order App')
+
   
-@login_required (login_url='/login') # Check Login
+@login_required (login_url='/login') # Check Login  #checked
 def addtocart (request, id):
     url= request.META.get('HTTP_REFERER') # get Last url
     current_user = request.user
@@ -34,22 +37,22 @@ def addtocart (request, id):
                 data.product_id = id
                 data.quantity = form.cleaned_data['quantity']
                 data.save()  #
-        request.session['cart_items'] = ShopCart.objects.filter(user_id=current_user.id).count #count item on shopcart
+        request.session['cart_items'] = ShopCart.objects.filter(user_id=current_user.id).count() #count item on shopcart
         messages.success(request, "ürün sepete eklendi")
         return HttpResponseRedirect(url)
                     #return HttpResponse ("Kaydedildi")
     else: #ürün sepete ekle butonuna basıldıysa
         if control ==1: #ürün varsa güncelle
-                data = ShopCart.objects.get(product_id=id)
-                data.quantity += 1
-                data.save()  #
+            data = ShopCart.objects.get(product_id=id)
+            data.quantity += 1
+            data.save()  #
         else:  #  ürün yoksa ekle
             data = ShopCart #model ile bağlantı4
             data.user_id = current_user.id
             data.product_id = id  
             data.quantity = 1
             data.save() #veritabanına kaydet
-        request.session['cart_items'] = ShopCart.objects.filter(user_id=current_user.id).count    
+        request.session['cart_items'] = ShopCart.objects.filter(user_id=current_user.id).count() 
         messages.success(request, "ürün sepete eklendi.")
         return HttpResponseRedirect(url) 
     
@@ -58,12 +61,12 @@ def addtocart (request, id):
 
 
 
-@login_required(login_url='/login') #check again
+@login_required(login_url='/login') #check again  #checked bat request session fazla 
 def shopcart(request):
-    category = Category.objects.all()
+    category = Category.objects.all()   #checked
     current_user = request.user
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
-    request.session['cart_items'] = ShopCart.objects.filter(user_id=current_user.id).count
+    request.session['cart_items'] = ShopCart.objects.filter(user_id=current_user.id).count()
 
     total = 0
     for rs in shopcart:
@@ -73,9 +76,9 @@ def shopcart(request):
                'total':total,
                'category':category
                }    
-    return render(request,'shopcart_products.html',context)
+    return render(request,'shopcart_product.html',context)
 
-@login_required(login_url='/login')
+@login_required(login_url='/login')  #checked
 def deletefromcart(request,id):
      ShopCart.objects.filter(id=id).delete()
      current_user = request.user
@@ -84,7 +87,7 @@ def deletefromcart(request,id):
      return HttpResponseRedirect("/shopcart")
 
 
-@login_required(login_url='/login')
+@login_required(login_url='/login')  #checked
 def orderproduct(request):
     category = Category.objects.all()
     current_user = request.user
@@ -145,3 +148,8 @@ def orderproduct(request):
                'profile': profile,
                }
     return render(request, 'Order_Form.html', context)
+
+
+        
+
+  

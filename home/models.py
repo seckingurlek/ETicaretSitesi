@@ -56,7 +56,7 @@ class ContactFormMessage(models.Model):
     def __str__(self):
         return self.name
     
-class ContactForm(ModelForm):
+class ContactForm(ModelForm):  #checked
     class Meta:
         model = ContactFormMessage
         fields = ['name', 'email', 'subject','message']
@@ -68,14 +68,14 @@ class ContactForm(ModelForm):
         }
         
 
-class UserProfile(models.Model):
+class UserProfile(models.Model):  #checked
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     phone = models.CharField(blank=True,max_length=20)
-    adress = models.CharField(blank=True,max_length=20)
+    adress = models.CharField(blank=True,max_length=150)
     city = models.CharField(blank=True,max_length=20)
     country = models.CharField(blank=True,max_length=20)
     image = models.ImageField(blank=True,upload_to='images/users/')
-
+    
     def __str__(self):
         return self.user.username
      
@@ -90,3 +90,7 @@ class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
         fields = ['phone', 'adress', 'city','country','image']
+
+
+
+        

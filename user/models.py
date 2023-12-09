@@ -1,3 +1,6 @@
-from django.db import models
+#
+#
+# CONTENT
+#content form
 
-# Create your models here.
+#cımages

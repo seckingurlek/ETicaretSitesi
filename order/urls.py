@@ -1,6 +1,7 @@
 
-from os import path
-from django import views
+from django.urls import path
+
+from order import views
 
 
 urlpatterns = [

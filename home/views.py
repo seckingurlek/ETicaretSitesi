@@ -11,17 +11,22 @@ from django.contrib import messages
 from product.models import Images, Product, Category, Comment
 from django.contrib.auth import logout, authenticate, login
 from order.models import ShopCart
-# from content.models import Menu, Content, CImages
+
 
 def index(request):
     current_user = request.user
     setting = Setting.objects.get(pk=1)
     sliderdata = Product.objects.all()[:4]
     category = Category.objects.all()
-    dayproducts=Product.objects.all()[:4]
-    lastproducts=Product.objects.all().order_by('-id')[:4]
-    randomproduct=Product.objects.all().order_by('?')[:4]
-    request.session['cart_items'] = ShopCart.objects.filter(user_id=current_user.id).count
+    dayproducts = Product.objects.all()[:4]
+    lastproducts = Product.objects.all().order_by('-id')[:4]
+    randomproduct = Product.objects.all().order_by('?')[:4]
+    
+    # count fonksiyonunu çağırmak için parantez kullanılmalı
+    cart_items_count = ShopCart.objects.filter(user_id=current_user.id).count()
+    
+    # request.session['cart_items'] değişkenine değeri atayın
+    request.session['cart_items'] = cart_items_count
     
 
     context = {'setting': setting,
@@ -36,8 +41,10 @@ def index(request):
 
 def hakkimizda(request):
     setting = Setting.objects.get(pk=1)
-    context = {'setting': setting}
-    return render(request,'hakkimizda.html',context)
+    category = Category.objects.all()
+    context = {'setting': setting, 'category': category}
+    return render(request, 'hakkimizda.html', context)
+
 
 def referanslar(request):
     setting = Setting.objects.get(pk=1)
@@ -64,7 +71,7 @@ def iletisim(request): #formu kaydetme
     context={'setting':setting,'form':form }
     return render(request, 'iletisim.html', context)
 
-def category_products(request,id,slug):
+def category_products(request,id,slug):  #checked
     category = Category.objects.all()
     categorydata = Category.objects.get(pk=id)
     products = Product.objects.filter(category_id=id)
@@ -74,7 +81,7 @@ def category_products(request,id,slug):
                 }
     return render(request,'products.html',context)
 
-def product_search (request):
+def product_search (request):  #checked
     if request.method == 'POST': # form post edildiyse I
         form = SearchForm(request.POST)
         if form.is_valid ():
@@ -93,7 +100,7 @@ def product_search (request):
                 return render(request, 'products_search.html', context)
     return HttpResponseRedirect('/')
 
-def product_detail(request,id,slug):
+def product_detail(request,id,slug):  #checked
     category = Category.objects.all()   
     product = Product.objects.all(pk=id)
     images = Images.objects.filter(product_id= id )
@@ -114,7 +121,7 @@ def content_detail(request,id,slug):
     return HttpResponseRedirect(link)
 
 
-def product_search_auto(request):
+def product_search_auto(request):  #checked
     if request.is_ajax():
         q = request.GET.get('term', '')
         products = Product.objects.filter(title__icontains=q)
@@ -136,7 +143,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-def login_view(request):
+def login_view(request):  #checked ama 28/18 farklı
     if request.method == 'POST':
         username= request.POST['username']
         password= request.POST['password']
@@ -154,7 +161,7 @@ def login_view(request):
         }
     return render(request, 'login.html',context)
 
-def signup_view(request):
+def signup_view(request): #checked
     if request.method == 'POST':
         form = SignUpForm(request.POST)  
         if form.is_valid():
@@ -169,7 +176,6 @@ def signup_view(request):
             data.user_id=current_user.id
             data.image="images/users/user.png"
             data.save()
-            messages.success(request,"Başarılı şekilde kayıt olundu")
             return HttpResponseRedirect('/')
     
     form = SignUpForm()       
@@ -202,3 +208,6 @@ def signup_view(request):
 #                 }  
 
 #     return render(request,'content_detail.html',context)
+
+
+#ERROR hatası 

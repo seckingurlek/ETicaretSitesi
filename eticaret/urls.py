@@ -40,6 +40,8 @@ urlpatterns = [
     path('search/',views.product_search, name='product_search'),
     path('product/<int:id>/<slug:slug>/', views.product_detail,name='product_detail'),
     path('content/<int:id>/<slug:slug>/', views.content_detail,name='content_detail'),
+   
+
     path('search_auto/',views.product_search_auto, name='product_search_auto'),
     path('logout/',views.logout_view,name='logout_view' ),
     path('login/',views.login_view,name='login_view' ),

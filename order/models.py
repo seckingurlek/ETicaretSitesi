@@ -27,7 +27,7 @@ class ShopCartForm(ModelForm):
         fields = ['quantity']
 
 
-class Order(models.Model):
+class Order(models.Model): #checked
     STATUS = (
         ('New', 'New'),
         ('Accepted', 'Accepted'),
