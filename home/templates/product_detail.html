@@ -8,7 +8,7 @@
     <link rel='shortcut icon' type='image/xicon' href='{{setting.icon.url}}' />
 {% endblock %}
 
-<!-- {% block sidebar %} {% include 'sidebar.html' %} {% endblock %} -->
+{% block sidebar %} {% include 'sidebar.html' %} {% endblock %}
 
 
 {% block content %}
@@ -132,7 +132,7 @@
                                                     <div class="single-review">
                                                         <div class="review-heading">
                                                             <div><a href="#"><i class="fa fa-user-o"></i> <b>{{ rs.user.first_name}}</b> </a></div>
-                                                            <div><a href="#"><i class="fa fa-clock-o"></i> {% rs.create_at %} </a></div>
+                                                            <div><a href="#"><i class="fa fa-clock-o"></i> {{ rs.create_at  }} </a></div>
                                                             <div class="review-rating pull-right">
                                                                 <i class="fa fa-star {% if rs.rate < 1 %}-o empty {% endif %} "></i>
                                                                 <i class="fa fa-star {% if rs.rate < 2 %}-o empty {% endif %} "></i>
@@ -189,7 +189,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {% is user.id is not None %}
+                                                    {% if user.id is not None %}
                                                     <button class="primary-btn">Send Comment</button>
                                                     {% else %}
                                                     Yorum eklemek için <a href="/login">  Login </a> olunuz.

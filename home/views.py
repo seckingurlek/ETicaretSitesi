@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 from eticaret.forms import SearchForm, SignUpForm
 #üstteki e ticaret yerine home.forms dene
@@ -11,6 +11,9 @@ from django.contrib import messages
 from product.models import Images, Product, Category, Comment
 from django.contrib.auth import logout, authenticate, login
 from order.models import ShopCart
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from home.forms import FileUploadForm
 
 
 def index(request):
@@ -53,6 +56,7 @@ def referanslar(request):
 
 
 def iletisim(request): #formu kaydetme
+    category = Category.objects.all()
     if request.method == 'POST': # check post
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -68,7 +72,7 @@ def iletisim(request): #formu kaydetme
         
     setting = Setting.objects.get(pk=1)
     form = ContactForm()
-    context={'setting':setting,'form':form }
+    context={'setting':setting,'form':form, 'category':category }
     return render(request, 'iletisim.html', context)
 
 def category_products(request,id,slug):  #checked
@@ -102,7 +106,7 @@ def product_search (request):  #checked
 
 def product_detail(request,id,slug):  #checked
     category = Category.objects.all()   
-    product = Product.objects.all(pk=id)
+    product = Product.objects.get(pk=id)
     images = Images.objects.filter(product_id= id )
     comments= Comment.objects.filter(product_id=id,status= 'True')
     context ={
@@ -185,29 +189,54 @@ def signup_view(request): #checked
             }
     return render(request, 'signup.html',context)
 
-# def menu(request,id):
-#     try:
-#         content= Content.objects.get(menu_id=id)
-#         link = '/content/' + str(content.id) + '/menu'
-#         return HttpResponseRedirect(link)
-#     except:
-#         messages.warning(request, "Hata! İlgili içerik bulunamadı ")
-#         link= '/error'
-#         return HttpResponseRedirect(link)
-    
-# def contentdatail(request,id,slug):
-#     category = Category.objects.all()
-#     menu= Menu.objects.all()
-#     content = Content.objects.get(pk=id)
-#     images = CImages.objects.filter(content_id=id)  
-#     #comments= Comment.objects.filter(product_id=id, stauts='True)
-#     context= {'content':content,
-#                 'category': category,
-#                 'menu':menu,
-#                 'images':images,
-#                 }  
+def mail(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Form doğrulandıysa, e-posta gönder
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            
+            send_mail(
+                subject,
+                message,
+                email,
+                ['destek@example.com'],  # Gönderilecek e-posta adresi
+                fail_silently=False,
+            )
 
-#     return render(request,'content_detail.html',context)
+            return JsonResponse({'success': True, 'message': 'E-posta başarıyla gönderildi.'})
+        else:
+            return JsonResponse({'success': False, 'message': 'Form doğrulama hatası.'})
+    else:
+        form = ContactForm()
+
+    return render(request, 'email.html', {'form': form})
 
 
-#ERROR hatası 
+# views.py
+
+import csv  # CSV dosyalarını okumak için ekledik, ihtiyaca göre diğer modülleri ekleyebilirsiniz.
+from django.shortcuts import render, redirect
+from .forms import FileUploadForm
+from .models import UploadedFile
+
+def file_upload_view(request):
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = form.save()  # Dosyayı kaydet
+
+            # Dosyayı okuma ve işleme işlemleri
+            file_content = uploaded_file.file.read().decode('utf-8')  # Dosyayı oku (örneğin UTF-8 kodlaması)
+
+            # Örnek olarak bir CSV dosyasını işleme:
+            csv_reader = csv.reader(file_content.splitlines())
+            for row in csv_reader:   
+                print(row)           
+            return redirect('success_page')  # Başarılı bir şekilde işlendiyse başka bir sayfaya yönlendirin.
+    else:
+        form = FileUploadForm()
+
+    return render(request, 'file_upload.html', {'form': form})

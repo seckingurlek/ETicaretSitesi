@@ -1,0 +1,40 @@
+<!-- templates/file_upload.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <!-- Bootstrap CSS Link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-TX8T7YDzrG2t1fe0DsA6s2IBsnmI0uJZkt3L/JbFMzL+pbUQ5Y8doeWtS9rjNXp1" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">File Upload</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" class="mb-3">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Choose a file</label>
+                                {{ form.file.label_tag }}
+                                {{ form.file }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload File</button>
+                        </form>
+                        <!-- Add your success or error messages here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js Links (required for Bootstrap) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-eB4OKVwEiSNJuXIZOH3fk4igXobRq4wE9AgOW7cZLuGJsZuIv1fE1PO5Y4Ff0Vcc" crossorigin="anonymous"></script>
+</body>
+</html>

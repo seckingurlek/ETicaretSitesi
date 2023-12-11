@@ -38,20 +38,66 @@
 		<!-- jQuery !-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
 <!-- jQuery UI 1-->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
 
     {% block head %} {% endblock %}
 </head>
 <body>
-    {% include 'header.html' %}
+    
 
     {% block sidebar %} {% endblock %}
     {% block slider %} {% endblock %}
     {% block content %} {% endblock %}
-    {% include 'footer.html' %}
-
+    
     {% block foot %} {% endblock %}
 
+
+   <!-- email.html -->
+
+<div class="col-md-3 col-sm-6 col-xs-6">
+    <div class="footer">
+        <h3 class="footer-header">Bize Ulaş - Mail</h3>
+        <p>Daha fazla bilgi için bize ulaşın</p>
+
+        <!-- Add the form for email -->
+        <form id="contactForm" method="post" action="{% url 'mail' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="primary-btn mail-icon" onclick="sendMail(event)">
+                <i class="fa fa-envelope"></i> Mail
+            </button>
+        </form>
+        
+        <div id="mailResponse" style="display: none;"></div>
+    </div>
+</div>
+
+<script>
+    function sendMail(event) {
+        event.preventDefault();
+
+        var form = document.getElementById('contactForm');
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            var mailResponse = document.getElementById('mailResponse');
+            mailResponse.style.display = 'block';
+            mailResponse.innerHTML = data.message;
+
+            if (data.success) {
+                // Reset the form on success
+                form.reset();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
 </body>
 </html>

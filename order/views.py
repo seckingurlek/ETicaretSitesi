@@ -47,7 +47,7 @@ def addtocart (request, id):
             data.quantity += 1
             data.save()  #
         else:  #  ürün yoksa ekle
-            data = ShopCart #model ile bağlantı4
+            data = ShopCart() #model ile bağlantı4
             data.user_id = current_user.id
             data.product_id = id  
             data.quantity = 1

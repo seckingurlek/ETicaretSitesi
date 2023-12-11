@@ -23,6 +23,7 @@ from django.urls import include
 
 from home import views
 from order import views as orderviews
+from home.views import file_upload_view
 
 urlpatterns = [
     path('', include('home.urls')),
@@ -40,13 +41,17 @@ urlpatterns = [
     path('search/',views.product_search, name='product_search'),
     path('product/<int:id>/<slug:slug>/', views.product_detail,name='product_detail'),
     path('content/<int:id>/<slug:slug>/', views.content_detail,name='content_detail'),
-   
+    path('mail/', views.mail, name='mail'),
 
     path('search_auto/',views.product_search_auto, name='product_search_auto'),
     path('logout/',views.logout_view,name='logout_view' ),
     path('login/',views.login_view,name='login_view' ),
     path('signup/',views.signup_view,name='signup_view' ),
-    path('shopcart/',orderviews.shopcart,name='shopcart')
+    path('shopcart/',orderviews.shopcart,name='shopcart'),
+
+    path('upload/', file_upload_view, name='file_upload'),
+
+    
     
 ]
 

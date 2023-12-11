@@ -23,55 +23,51 @@
     </div>
     <!-- /BREADCRUMB -->
 
-    <!-- section -->
-    <div class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
+<!-- section -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
 
-                <div class="col-md-4">
+            <div class="col-md-4">
 
-                    <div class="billing-details">
+                <div class="billing-details">
 
-                        <div class="section-title">
-                            <h3 class="title">İletişim Formu</h3>
-
-                            {% if messages %}
-                                {% for message in messages %}
-                                    <div class="alert alert-{{message.tags}}" role="alert">
-                                        {{ message }}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-
-                        </div>
-                        <form action=""  method="post">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <input type="submit" value="SEND FORM">
-                        </form>
-                    </div>
-
-                </div>
-
-                <div class="col-md-8">
                     <div class="section-title">
-                            <h3 class="title">İletişim Bilgileri</h3>
-                        </div>
-                        <div >
-                            {{ setting.contactus|safe }}
-                        </div>
+                        <h3 class="title">İletişim Formu</h3>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{message.tags}}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
 
                     </div>
+                    <form action="{% url 'iletisim' %}" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="SEND FORM">
+                    </form>
                 </div>
-
 
             </div>
-            <!-- /row -->
+
+            <div class="col-md-8">
+                <div class="section-title">
+                    <h3 class="title">İletişim Bilgileri</h3>
+                </div>
+                <div>
+                    {{ setting.contactus|safe }}
+                </div>
+            </div>
+
         </div>
-        <!-- /container -->
+        <!-- /row -->
     </div>
-    <!-- /section -->
+    <!-- /container -->
+</div>
 
 {% endblock %}

@@ -3,6 +3,7 @@ from django.db import models
 from django.forms import ModelForm, TextInput, Textarea
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
+
 # Create your models here.
 
 class Setting(models.Model):
@@ -93,4 +94,5 @@ class UserProfileForm(ModelForm):
 
 
 
-        
+class UploadedFile(models.Model):
+    file = models.FileField(upload_to='uploads/')       
